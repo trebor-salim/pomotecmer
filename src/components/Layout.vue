@@ -1,10 +1,10 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="4">
+      <v-col cols="12" md="4">
         <Tomato />
       </v-col>
-      <v-col cols="8">
+      <v-col cols="12" md="8">
         <Todos title="Pomodoro todos"/>
       </v-col>
     </v-row>

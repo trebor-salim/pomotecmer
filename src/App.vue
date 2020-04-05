@@ -7,8 +7,8 @@
       <p>{{ appVersion }}</p>
       <v-spacer></v-spacer>
       <v-btn text href="https://en.wikipedia.org/wiki/Pomodoro_Technique" target="_blank">
-        <span class="mr-2">Pomodoro Technique timer</span>
-        <v-icon>mdi-open-in-new</v-icon>
+        <span class="mr-2 d-none d-sm-inline">Pomodoro Technique timer</span>
+        <v-icon title="Pomodoro Technique timer">mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>
 
@@ -29,7 +29,7 @@ export default Vue.extend({
   },
   data: () => ({
     appName: "Pomótecmer",
-    appVersion: "v0.2.4"
+    appVersion: "v0.2.5"
   })
 });
 </script>
