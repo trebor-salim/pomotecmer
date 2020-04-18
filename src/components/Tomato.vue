@@ -131,7 +131,7 @@ export default Vue.extend({
     audio: new Audio("alarm.mp3"),
     pomodoro: 25,
     shortBrake: 5,
-    longBrake: 30
+    longBrake: 20
   }),
   mounted() {
     this.pomodorosCounter = Storage.read(

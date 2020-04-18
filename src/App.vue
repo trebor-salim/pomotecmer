@@ -29,7 +29,7 @@ export default Vue.extend({
   },
   data: () => ({
     appName: "Pomótecmer",
-    appVersion: "v0.2.5"
+    appVersion: "v0.2.6"
   })
 });
 </script>
