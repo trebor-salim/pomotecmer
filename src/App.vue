@@ -6,15 +6,19 @@
       </v-toolbar-title>
       <p>{{ appVersion }}</p>
       <v-spacer></v-spacer>
-      <v-btn text href="https://en.wikipedia.org/wiki/Pomodoro_Technique" target="_blank">
+      <v-btn
+        text
+        href="https://en.wikipedia.org/wiki/Pomodoro_Technique"
+        target="_blank"
+      >
         <span class="mr-2 d-none d-sm-inline">Pomodoro Technique timer</span>
         <v-icon title="Pomodoro Technique timer">mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>
 
-    <v-content>
-      <Layout />
-    </v-content>
+    <v-main>
+      <Layout :appName="appName" />
+    </v-main>
   </v-app>
 </template>
 
@@ -25,11 +29,11 @@ import Layout from "./components/Layout.vue";
 export default Vue.extend({
   name: "App",
   components: {
-    Layout
+    Layout,
   },
   data: () => ({
     appName: "Pomótecmer",
-    appVersion: "v0.2.6"
-  })
+    appVersion: "v0.3.0",
+  }),
 });
 </script>

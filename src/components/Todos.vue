@@ -5,7 +5,7 @@
       <span v-else>{{ title }}</span>
       <v-btn
         icon
-        :disabled="tasks.length===0"
+        :disabled="tasks.length === 0"
         @click="removeCompletedTasks"
         title="Remove completed"
         :color="$vuetify.theme.themes.light.primary"
@@ -13,15 +13,24 @@
         <v-icon>mdi-delete</v-icon>
       </v-btn>
     </p>
-    <v-card v-show="tasks.length > 0" tile style="max-height: 440px; overflow-y: auto">
+    <v-card
+      v-show="tasks.length > 0"
+      tile
+      style="max-height: 760px; overflow-y: auto"
+    >
       <v-list flat>
         <v-list-item-group>
           <v-list-item v-for="(task, index) in tasks" :key="index">
             <v-list-item-action title="Is done">
-              <v-checkbox v-model="task.done" @click.native="saveTasks(task)"></v-checkbox>
+              <v-checkbox
+                v-model="task.done"
+                @click.native="saveTasks(task)"
+              ></v-checkbox>
             </v-list-item-action>
             <v-list-item-content>
-              <div v-if="task.done" class="text-left task-done">{{ task.title }}</div>
+              <div v-if="task.done" class="text-left task-done">
+                {{ task.title }}
+              </div>
               <v-text-field
                 v-else-if="editedTaskIndex === index"
                 class="text-left"
@@ -33,8 +42,19 @@
               ></v-text-field>
               <div v-else class="text-left">
                 {{ task.title }}
-                <v-btn icon @click="task.doing=!task.doing;saveTasks()" title="Is doing">
-                  <v-progress-circular :indeterminate="task.doing" :value="0" size="20"></v-progress-circular>
+                <v-btn
+                  icon
+                  @click="
+                    task.doing = !task.doing;
+                    saveTasks();
+                  "
+                  title="Is doing"
+                >
+                  <v-progress-circular
+                    :indeterminate="task.doing"
+                    :value="0"
+                    size="20"
+                  ></v-progress-circular>
                 </v-btn>
               </div>
             </v-list-item-content>
@@ -42,7 +62,11 @@
               <v-btn
                 :disabled="task.done"
                 icon
-                @click="editedTaskIndex !== index ? editedTaskIndex = index: editedTaskIndex = -1"
+                @click="
+                  editedTaskIndex !== index
+                    ? (editedTaskIndex = index)
+                    : (editedTaskIndex = -1)
+                "
                 title="Toggle edit mode"
               >
                 <v-icon small>mdi-pencil</v-icon>
@@ -57,7 +81,11 @@
         </v-list-item-group>
       </v-list>
     </v-card>
-    <v-text-field v-model="newTask" label="What's to do?" @keypress.enter="addTask"></v-text-field>
+    <v-text-field
+      v-model="newTask"
+      label="What's to do?"
+      @keypress.enter="addTask"
+    ></v-text-field>
   </div>
 </template>
 
@@ -70,7 +98,7 @@ export default Vue.extend({
   data: () => ({
     newTask: "",
     tasks: new Array<{ title: string; doing: boolean; done: boolean }>(),
-    editedTaskIndex: -1
+    editedTaskIndex: -1,
   }),
   mounted() {
     this.tasks = Storage.read("tasks", this.tasks);
@@ -78,7 +106,7 @@ export default Vue.extend({
   methods: {
     addTask(): void {
       if (this.newTask.trim().length > 0) {
-        this.tasks.push({ title: this.newTask, doing: false, done: false });
+        this.tasks.unshift({ title: this.newTask, doing: false, done: false });
         this.newTask = "";
         this.saveTasks();
       }
@@ -103,8 +131,8 @@ export default Vue.extend({
         }
       }
       Storage.write("tasks", this.tasks);
-    }
-  }
+    },
+  },
 });
 </script>
 

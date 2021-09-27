@@ -16,7 +16,8 @@
           :width="25"
           :value="position"
           :color="$vuetify.theme.themes.light.primary"
-        >{{ Math.floor(position) }}%</v-progress-circular>
+          >{{ Math.floor(position) }}%</v-progress-circular
+        >
       </v-col>
     </v-row>
     <v-row dense v-show="isPomodoroEnded">
@@ -34,7 +35,12 @@
             v-model.number="duration"
             :disabled="timerId !== 0"
             ref="refToDuration"
-            :rules="[v => v.length > 0 || (parseInt(v, 10) > 2 && parseInt(v, 10) < 31) || 'Duration must be a valid number greater than 2 and lesser than 31!']"
+            :rules="[
+              (v) =>
+                v.length > 0 ||
+                (parseInt(v, 10) > 2 && parseInt(v, 10) < 31) ||
+                'Duration must be a valid number greater than 2 and lesser than 31!',
+            ]"
           ></v-text-field>
         </v-form>
       </v-col>
@@ -71,7 +77,7 @@
                 :src="require('../assets/tomato.png')"
                 class="my-3"
                 contain
-                :height="(p*10) + 15"
+                :height="p * 10 + 15"
               ></v-img>
             </v-col>
           </v-row>
@@ -83,28 +89,43 @@
         <v-form @submit.prevent>
           <v-row>
             <v-col cols="4" align="center">
-              <v-text-field style="width:65px" disabled label="Pomodoro" :value="pomodoro"></v-text-field>
+              <v-text-field
+                style="width: 65px"
+                disabled
+                label="Pomodoro"
+                :value="pomodoro"
+              ></v-text-field>
             </v-col>
             <v-col cols="4" align="center">
               <v-text-field
-                style="width:65px"
+                style="width: 65px"
                 type="number"
                 label="Short brake"
                 v-model.number="shortBrake"
                 :disabled="timerId !== 0"
                 ref="refToShortBrake"
-                :rules="[v => v.length > 0 || (parseInt(v, 10) > 2 && parseInt(v, 10) < 6) || 'Short brake must be a valid number greater than 2 and lesser than 6!']"
+                :rules="[
+                  (v) =>
+                    v.length > 0 ||
+                    (parseInt(v, 10) > 2 && parseInt(v, 10) < 6) ||
+                    'Short brake must be a valid number greater than 2 and lesser than 6!',
+                ]"
               ></v-text-field>
             </v-col>
             <v-col cols="4" align="center">
               <v-text-field
-                style="width:65px"
+                style="width: 65px"
                 type="number"
                 label="Long brake"
                 v-model.number="longBrake"
                 :disabled="timerId !== 0"
                 ref="refToLongBrake"
-                :rules="[v => v.length > 0 || (parseInt(v, 10) > 14 && parseInt(v, 10) < 31) || 'Long brake must be a valid number greater than 14 and lesser than 31!']"
+                :rules="[
+                  (v) =>
+                    v.length > 0 ||
+                    (parseInt(v, 10) > 14 && parseInt(v, 10) < 31) ||
+                    'Long brake must be a valid number greater than 14 and lesser than 31!',
+                ]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -119,6 +140,7 @@ import Vue from "vue";
 import { Storage } from "@/storage";
 
 export default Vue.extend({
+  props: ["appName"],
   data: () => ({
     duration: 25,
     timerId: 0,
@@ -131,7 +153,7 @@ export default Vue.extend({
     audio: new Audio("alarm.mp3"),
     pomodoro: 25,
     shortBrake: 5,
-    longBrake: 20
+    longBrake: 20,
   }),
   mounted() {
     this.pomodorosCounter = Storage.read(
@@ -148,7 +170,7 @@ export default Vue.extend({
     },
     longBrake() {
       Storage.write("longBrake", this.longBrake);
-    }
+    },
   },
   methods: {
     start(): void {
@@ -201,6 +223,7 @@ export default Vue.extend({
           this.pomodorosReset();
         }
         this.audio.play();
+        this.notify(this.whichPomodoroHasBeenEnded);
       }
     },
     next(event: any): void {
@@ -236,7 +259,21 @@ export default Vue.extend({
     },
     savePomodorosCounter(): void {
       Storage.write("pomodorosCounter", this.pomodorosCounter);
-    }
-  }
+    },
+    notify(message: string): void {
+      const title = this.appName;
+      if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+      } else if (Notification.permission === "granted") {
+        new Notification(title, { body: message });
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(function (permission) {
+          if (permission === "granted") {
+            new Notification(title, { body: message });
+          }
+        });
+      }
+    },
+  },
 });
 </script>
